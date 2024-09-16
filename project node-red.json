@@ -1,0 +1,281 @@
+[
+    {
+        "id": "38586517.a5bf9a",
+        "type": "plate-recognizer",
+        "z": "aba63c9518a428ed",
+        "name": "",
+        "inputField": "payload",
+        "inputFieldType": "msg",
+        "outputField": "payload",
+        "outputFieldType": "msg",
+        "url": "https://api.platerecognizer.com/v1/plate-reader/",
+        "ignoreDuring": false,
+        "makeAndModel": false,
+        "statusText": "none",
+        "cameraId": "",
+        "separateMsg": false,
+        "regionFilter": false,
+        "regionList": "",
+        "regionListType": "json",
+        "x": 774,
+        "y": 305,
+        "wires": [
+            [
+                "30cb89da.c35546"
+            ],
+            [
+                "30cb89da.c35546"
+            ]
+        ]
+    },
+    {
+        "id": "e4699284.081c7",
+        "type": "inject",
+        "z": "aba63c9518a428ed",
+        "name": "",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 157,
+        "y": 239,
+        "wires": [
+            [
+                "03dd103878c58d7c"
+            ]
+        ]
+    },
+    {
+        "id": "30cb89da.c35546",
+        "type": "debug",
+        "z": "aba63c9518a428ed",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "x": 982,
+        "y": 267,
+        "wires": []
+    },
+    {
+        "id": "03dd103878c58d7c",
+        "type": "file in",
+        "z": "aba63c9518a428ed",
+        "name": "",
+        "filename": "payload",
+        "filenameType": "msg",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "base64",
+        "allProps": false,
+        "x": 508.5,
+        "y": 319,
+        "wires": [
+            [
+                "38586517.a5bf9a",
+                "09f8e51235481e14"
+            ]
+        ]
+    },
+    {
+        "id": "function_random_path",
+        "type": "function",
+        "z": "aba63c9518a428ed",
+        "name": "Chemin aléatoire",
+        "func": "const randomNumber = Math.floor(Math.random() * 10) + 1;\nconst imagePath = `C:/Users/DD2t1/Pictures/immaticulation/${randomNumber}.jpg`;\nmsg.payload = imagePath;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 346,
+        "y": 404,
+        "wires": [
+            [
+                "03dd103878c58d7c"
+            ]
+        ]
+    },
+    {
+        "id": "15875fd5860076d8",
+        "type": "inject",
+        "z": "aba63c9518a428ed",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 125.5,
+        "y": 409,
+        "wires": [
+            [
+                "function_random_path"
+            ]
+        ]
+    },
+    {
+        "id": "09f8e51235481e14",
+        "type": "image viewer",
+        "z": "aba63c9518a428ed",
+        "name": "",
+        "width": 160,
+        "data": "payload",
+        "dataType": "msg",
+        "active": true,
+        "x": 748,
+        "y": 394,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "38cf61ba7d843f26",
+        "type": "aedes broker",
+        "z": "aba63c9518a428ed",
+        "name": "",
+        "mqtt_port": 1883,
+        "mqtt_ws_bind": "port",
+        "mqtt_ws_port": "",
+        "mqtt_ws_path": "",
+        "cert": "",
+        "key": "",
+        "certname": "",
+        "keyname": "",
+        "persistence_bind": "memory",
+        "dburl": "",
+        "usetls": false,
+        "x": 367,
+        "y": 468,
+        "wires": [
+            [],
+            []
+        ]
+    },
+    {
+        "id": "c915731d0c28226a",
+        "type": "mqtt in",
+        "z": "aba63c9518a428ed",
+        "name": "",
+        "topic": "home/sensor/poids/state",
+        "qos": "2",
+        "datatype": "buffer",
+        "broker": "738c086d304ed588",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 360,
+        "y": 554,
+        "wires": [
+            [
+                "229b2b2d67b040a3"
+            ]
+        ]
+    },
+    {
+        "id": "229b2b2d67b040a3",
+        "type": "debug",
+        "z": "aba63c9518a428ed",
+        "name": "debug 16",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 554,
+        "y": 554,
+        "wires": []
+    },
+    {
+        "id": "6168955317ba6de8",
+        "type": "mqtt in",
+        "z": "aba63c9518a428ed",
+        "name": "",
+        "topic": "home/sensor/immaticulation/set",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "738c086d304ed588",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 374,
+        "y": 621,
+        "wires": [
+            [
+                "f38f7b5683582025"
+            ]
+        ]
+    },
+    {
+        "id": "f38f7b5683582025",
+        "type": "mqtt out",
+        "z": "aba63c9518a428ed",
+        "name": "",
+        "topic": "home/sensor/immaticulation/state",
+        "qos": "",
+        "retain": "",
+        "respTopic": "",
+        "contentType": "",
+        "userProps": "",
+        "correl": "",
+        "expiry": "",
+        "broker": "738c086d304ed588",
+        "x": 730,
+        "y": 645,
+        "wires": []
+    },
+    {
+        "id": "738c086d304ed588",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "localhost",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    }
+]
