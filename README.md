@@ -33,7 +33,7 @@ wifi:
   password: "Your-WiFi-Password"
 
 mqtt:
-  broker: "192.168.129.188"  # Update with your broker IP address
+  broker: "*** *** ***  # Update with your broker IP address
 ```
 Calibration
 The HX711 sensor is calibrated with two reference points:
