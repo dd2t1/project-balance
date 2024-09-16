@@ -8,10 +8,10 @@ esp32:
     type: arduino
 
 wifi:
-  ssid: "Proximus-Home-468616"
-  password: "Floanju123"
+  ssid: "you ssid"
+  password: "you pass"
 mqtt:
-  broker: "192.168.129.188"
+  broker: "you broker"
   
 ota:
   - platform: esphome
