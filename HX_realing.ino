@@ -1,51 +1,43 @@
-/*
- Example using the SparkFun HX711 breakout board with a scale
- By: Nathan Seidle
- SparkFun Electronics
- Date: November 19th, 2014
- License: This code is public domain but you buy me a beer if you use this and we meet someday (Beerware license).
-
- This example demonstrates basic scale output. See the calibration sketch to get the calibration_factor for your
- specific load cell setup.
-
- This example code uses bogde's excellent library: https://github.com/bogde/HX711
- bogde's library is released under a GNU GENERAL PUBLIC LICENSE
-
- The HX711 does one thing well: read load cells. The breakout board is compatible with any wheat-stone bridge
- based load cell which should allow a user to measure everything from a few grams to tens of tons.
- Arduino pin 2 -> HX711 CLK
- 3 -> DAT
- 5V -> VCC
- GND -> GND
-
- The HX711 board can be powered from 2.7V to 5V so the Arduino 5V power should be fine.
-
-*/
-
 #include "HX711.h"
 
-#define calibration_factor 1660.00 //This value is obtained using the SparkFun_HX711_Calibration sketch
+float calibration_factor = 7050; //This value is obtained using the SparkFun_HX711_Calibration sketch
 
 #define DOUT  1
 #define CLK  2
-
+#define BT 19   // Bouton de tare sur pin 19
+#define TB 14   // Nouveau bouton sur pin 14 pour lire la valeur du capteur
 HX711 scale;
 
 void setup() {
   Serial.begin(9600);
-  Serial.println("demarrage");
+  Serial.println("Démarrage");
 
   scale.begin(DOUT, CLK);
   scale.set_scale(calibration_factor); //This value is obtained by using the SparkFun_HX711_Calibration sketch
   delay(6000);
-  scale.tare(); //Assuming there is no weight on the scale at start up, reset the scale to 0
-
-  Serial.println("mise a zero");
+  scale.tare(); // Assumer qu'il n'y a pas de poids sur la balance au démarrage
+  pinMode(BT, INPUT_PULLUP);  // Bouton de tare
+  pinMode(TB, INPUT_PULLUP);  // Nouveau bouton pour lire la valeur
+  Serial.println("Mise à zéro");
 }
 
 void loop() {
-  Serial.print("Reading: ");
-  Serial.print(scale.get_units(), 1); //scale.get_units() returns a float
-  Serial.print(" g"); //You can change this to kg but you'll need to refactor the calibration_factor
-  Serial.println();
+  // Vérifier si le bouton de tare (BT) est pressé
+  if (digitalRead(BT) == LOW) {
+    scale.set_scale(calibration_factor);
+    Serial.println("Tare activé pour les deux capteurs");
+    scale.tare();  // Réinitialiser la balance
+    delay(500);    // Petit délai pour éviter les déclenchements multiples
+  }
+  
+  // Lire la valeur lorsque le bouton TB est pressé
+  if (digitalRead(TB) == LOW) {
+    Serial.print("Lecture: ");
+    Serial.print(scale.get_units(), 1); // scale.get_units() renvoie un float
+    Serial.print(" g"); // Affichage en grammes
+    Serial.println();
+    delay(500); // Délai pour éviter les déclenchements multiples
+  }
+
+  delay(100); // Boucle principale avec un petit délai
 }
