@@ -31,6 +31,7 @@ void loop() {
   }
   
   // Lire la valeur lorsque le bouton TB est pressé
+  // regex expression 152K => 0054865 
   if (digitalRead(TB) == LOW) {
     Serial.print("Lecture: ");
     Serial.print(scale.get_units(), 1); // scale.get_units() renvoie un float
