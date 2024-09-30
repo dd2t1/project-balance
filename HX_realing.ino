@@ -8,6 +8,9 @@ float calibration_factor = 7050; //This value is obtained using the SparkFun_HX7
 #define TB 14   // Nouveau bouton sur pin 14 pour lire la valeur du capteur
 HX711 scale;
 
+int number;
+char *result = malloc(9);  // Allouer de la mémoire pour 8 chiffres + \0
+
 void setup() {
   Serial.begin(9600);
   Serial.println("Démarrage");
@@ -30,13 +33,10 @@ void loop() {
     delay(500);    // Petit délai pour éviter les déclenchements multiples
   }
   
-  // Lire la valeur lorsque le bouton TB est pressé
-  // regex expression 152K => 0054865 
   if (digitalRead(TB) == LOW) {
-    Serial.print("Lecture: ");
-    Serial.print(scale.get_units(), 1); // scale.get_units() renvoie un float
-    Serial.print(" g"); // Affichage en grammes
-    Serial.println();
+    number = (int) scale.get_units();  // Convertir en int
+    sprintf(result, "%08d", number);  // Formater avec 8 chiffres
+    Serial.println(result);  // Afficher le résultat formaté
     delay(500); // Délai pour éviter les déclenchements multiples
   }
 
