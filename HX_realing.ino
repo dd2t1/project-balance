@@ -9,7 +9,18 @@ float calibration_factor = 7050; //This value is obtained using the SparkFun_HX7
 HX711 scale;
 
 int number;
-char *result = malloc(9);  // Allouer de la mémoire pour 8 chiffres + \0
+char *result = (char*) malloc(8);  // Allouer de la mémoire pour 8 chiffres + \0
+
+void removeDashes(char* str) {
+  int j = 0;
+  for (int i = 0; str[i] != '\0'; i++) {
+    if (str[i] != '-') {
+      str[j++] = str[i];  // Copier les caractères qui ne sont pas "-"
+    }
+  }
+  str[j] = '\0';  // Terminer la chaîne
+}
+
 
 void setup() {
   Serial.begin(9600);
@@ -35,7 +46,8 @@ void loop() {
   
   if (digitalRead(TB) == LOW) {
     number = (int) scale.get_units();  // Convertir en int
-    sprintf(result, "%08d", number);  // Formater avec 8 chiffres
+    sprintf(result, "%07d", number);  // Formater avec 8 chiffres
+    removeDashes(result); 
     Serial.println(result);  // Afficher le résultat formaté
     delay(500); // Délai pour éviter les déclenchements multiples
   }
