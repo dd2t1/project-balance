@@ -1,0 +1,34 @@
+esphome:
+  name: home
+  friendly_name: home
+
+esp32:
+  board: esp32-s3-devkitc-1
+  framework:
+    type: arduino
+
+wifi:
+  ssid: "you ssid"
+  password: "you pass"
+mqtt:
+  broker: "you broker"
+  
+ota:
+  - platform: esphome
+    password: "Geek15pad"
+
+sensor:
+  - platform: hx711
+    name: "Poids"
+    dout_pin: 1
+    clk_pin: 2
+    gain: 128
+    update_interval: 2s
+    filters:
+      - calibrate_linear:
+          - 702796 -> 0
+          - 848243 -> 180  # Ajustez ces valeurs pour la calibration
+      - delta: 5  # Ne publie que si la valeur change de plus de 5 grammes
+    unit_of_measurement: "g"
+    accuracy_decimals: 2
+    id: poids
